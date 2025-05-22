@@ -1,6 +1,6 @@
 import { Avatar, Box, Card, CardMedia, Chip, CircularProgress, Grid, Paper, Rating, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useFetchData from '../hooks/useFetchData';
 import { useTmdbConfig } from '../hooks/useTmdbConfig';
 import { fetchTVShowDetails, fetchTVWatchProviders } from '../services/tmdbApi';
@@ -47,34 +47,42 @@ const WhereToWatchTable = ({ providers }) => {
   );
 };
 
-const SeasonsTable = ({ seasons, getImageUrl, tvId }) => (
-  <TableContainer component={Paper} sx={{ mb: 2 }}>
-    <Table size="small">
-      <TableHead>
-        <TableRow>
-          <TableCell>Poster</TableCell>
-          <TableCell>Name</TableCell>
-          <TableCell>Year</TableCell>
-          <TableCell>Episodes</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {seasons && seasons.length > 0 ? seasons.filter(s => s.season_number > 0).map(season => (
-          <TableRow key={season.id} hover component={Link} to={`/tv/${tvId}/season/${season.season_number}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-            <TableCell>
-              <Avatar variant="rounded" src={season.poster_path ? getImageUrl(season.poster_path, 'w92') : '/500x750.png'} alt={season.name} sx={{ width: 40, height: 60, bgcolor: 'grey.200' }} />
-            </TableCell>
-            <TableCell>{season.name}</TableCell>
-            <TableCell>{season.air_date ? new Date(season.air_date).getFullYear() : ''}</TableCell>
-            <TableCell>{season.episode_count}</TableCell>
+const SeasonsTable = ({ seasons, getImageUrl, tvId }) => {
+  const navigate = useNavigate();
+  return (
+    <TableContainer component={Paper} sx={{ mb: 2 }}>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell>Poster</TableCell>
+            <TableCell>Name</TableCell>
+            <TableCell>Year</TableCell>
+            <TableCell>Episodes</TableCell>
           </TableRow>
-        )) : (
-          <TableRow><TableCell colSpan={4} align="center">No seasons available.</TableCell></TableRow>
-        )}
-      </TableBody>
-    </Table>
-  </TableContainer>
-);
+        </TableHead>
+        <TableBody>
+          {seasons && seasons.length > 0 ? seasons.filter(s => s.season_number > 0).map(season => (
+            <TableRow 
+              key={season.id} 
+              hover 
+              onClick={() => navigate(`/tv/${tvId}/season/${season.season_number}`)}
+              style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
+            >
+              <TableCell>
+                <Avatar variant="rounded" src={season.poster_path ? getImageUrl(season.poster_path, 'w92') : '/500x750.png'} alt={season.name} sx={{ width: 40, height: 60, bgcolor: 'grey.200' }} />
+              </TableCell>
+              <TableCell>{season.name}</TableCell>
+              <TableCell>{season.air_date ? new Date(season.air_date).getFullYear() : ''}</TableCell>
+              <TableCell>{season.episode_count}</TableCell>
+            </TableRow>
+          )) : (
+            <TableRow><TableCell colSpan={4} align="center">No seasons available.</TableCell></TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+};
 
 const TrailersTable = ({ videos }) => {
   return (
@@ -90,20 +98,18 @@ const TrailersTable = ({ videos }) => {
         </TableHead>
         <TableBody>
           {videos && videos.length > 0 ? videos.map(video => (
-            <TableRow key={video.id} hover>
+            <TableRow
+              key={video.id}
+              hover
+              onClick={() => window.open(`https://www.youtube.com/watch?v=${video.key}`, '_blank', 'noopener,noreferrer')}
+              style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
+            >
               <TableCell>
-                <a
-                  href={`https://www.youtube.com/watch?v=${video.key}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ display: 'inline-block' }}
-                >
-                  <img
-                    src={`https://img.youtube.com/vi/${video.key}/default.jpg`}
-                    alt={video.name}
-                    style={{ width: 80, height: 45, borderRadius: 4 }}
-                  />
-                </a>
+                <img
+                  src={`https://img.youtube.com/vi/${video.key}/default.jpg`}
+                  alt={video.name}
+                  style={{ width: 80, height: 45, borderRadius: 4 }}
+                />
               </TableCell>
               <TableCell>{video.name}</TableCell>
               <TableCell>{video.type}</TableCell>
@@ -120,6 +126,7 @@ const TrailersTable = ({ videos }) => {
 
 const CastTable = ({ cast }) => {
   const { getImageUrl } = useTmdbConfig();
+  const navigate = useNavigate();
   return (
     <TableContainer component={Paper} sx={{ mb: 2 }}>
       <Table size="small">
@@ -133,7 +140,12 @@ const CastTable = ({ cast }) => {
         </TableHead>
         <TableBody>
           {cast && cast.length > 0 ? cast.map(person => (
-            <TableRow key={person.cast_id || person.id || person.credit_id} hover>
+            <TableRow
+              key={person.cast_id || person.id || person.credit_id}
+              hover
+              onClick={() => navigate(`/person/${person.id}`)}
+              style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
+            >
               <TableCell>
                 <Avatar variant="rounded" src={person.profile_path ? getImageUrl(person.profile_path, 'w92') : '/500x750.png'} alt={person.name} sx={{ width: 40, height: 60, bgcolor: 'grey.200' }} />
               </TableCell>

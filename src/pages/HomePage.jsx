@@ -1,4 +1,4 @@
-import { Box, Card, CardActionArea, CardMedia, Grid, Paper, Skeleton, Typography } from '@mui/material';
+import { Box, Card, CardActionArea, CardMedia, Grid, Skeleton, Typography } from '@mui/material';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
@@ -84,19 +84,54 @@ const HomePage = () => {
       <Box mb={4}>
         <SearchBar />
       </Box>
-      <Paper elevation={3} sx={{ mb: 5, borderRadius: 3, overflow: 'hidden', minHeight: 320, position: 'relative' }}>
-        {heroImageUrl && (
+      {heroImageUrl && heroItem && (
+        <Box
+          sx={{
+            mb: 5,
+            height: { xs: 220, sm: 320 },
+            backgroundImage: `url(${heroImageUrl})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            width: '100%',
+            borderRadius: 3,
+            minHeight: 220,
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
           <Box
             sx={{
-              height: { xs: 220, sm: 320 },
-              backgroundImage: `url(${heroImageUrl})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              width: '100%',
+              position: 'absolute',
+              inset: 0,
+              bgcolor: 'rgba(0,0,0,0.45)',
+              zIndex: 1,
+              borderRadius: 3,
             }}
           />
-        )}
-      </Paper>
+          <Box
+            sx={{
+              position: 'absolute',
+              zIndex: 2,
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              justifyContent: 'flex-end',
+              p: { xs: 2, sm: 4 },
+            }}
+          >
+            <Typography variant="overline" color="primary.contrastText" fontWeight={700} sx={{ mb: 0.5, bgcolor: 'primary.main', px: 1.5, py: 0.5, borderRadius: 1, fontSize: 14 }}>
+              Movie of the Day
+            </Typography>
+            <Typography variant="h4" color="common.white" fontWeight={700} sx={{ textShadow: '0 2px 8px rgba(0,0,0,0.7)' }}>
+              {heroItem.title || heroItem.name}
+            </Typography>
+          </Box>
+        </Box>
+      )}
       <Carousel title="Trending Movies Today" items={trendingMovies?.results} isLoading={trendingMoviesLoading} error={trendingMoviesError} />
       <Carousel title="Trending TV Shows Today" items={trendingTV?.results} isLoading={trendingTVLoading} error={trendingTVError} />
       <Carousel title="Popular Movies" items={popularMovies?.results} isLoading={popularMoviesLoading} error={popularMoviesError} />

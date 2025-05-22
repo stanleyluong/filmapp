@@ -165,8 +165,8 @@ export const fetchSeasonDetails = (params) => {
 };
 
 export const fetchEpisodeDetails = (params) => {
-  const { tvId, seasonNumber, episodeNumber } = params;
-  return fetchData(`/tv/${tvId}/season/${seasonNumber}/episode/${episodeNumber}`);
+  const { tvId, seasonNumber, episodeNumber, appendToResponse } = params;
+  return fetchData(`/tv/${tvId}/season/${seasonNumber}/episode/${episodeNumber}`, appendToResponse ? { append_to_response: appendToResponse } : {});
 };
 
 export default tmdbApi; 

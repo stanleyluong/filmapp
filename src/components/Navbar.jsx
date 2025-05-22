@@ -24,6 +24,24 @@ const Navbar = () => {
         </Box>
         <Button
           component={RouterLink}
+          to="/top-rated-movies"
+          color="primary"
+          variant="text"
+          sx={{ fontWeight: 600, mr: 2 }}
+        >
+          Top Rated Movies
+        </Button>
+        <Button
+          component={RouterLink}
+          to="/top-rated-tv-shows"
+          color="primary"
+          variant="text"
+          sx={{ fontWeight: 600, mr: 2 }}
+        >
+          Top Rated TV Shows
+        </Button>
+        <Button
+          component={RouterLink}
           to="/about"
           color="primary"
           variant="text"

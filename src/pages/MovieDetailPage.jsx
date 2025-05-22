@@ -1,12 +1,13 @@
 import { Avatar, Box, Card, CardMedia, Chip, CircularProgress, Grid, Paper, Rating, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useFetchData from '../hooks/useFetchData';
 import { useTmdbConfig } from '../hooks/useTmdbConfig';
 import { fetchMovieDetails, fetchMovieWatchProviders } from '../services/tmdbApi';
 
 const CastTable = ({ cast }) => {
   const { getImageUrl } = useTmdbConfig();
+  const navigate = useNavigate();
   return (
     <TableContainer component={Paper} sx={{ mb: 2 }}>
       <Table size="small">
@@ -20,7 +21,12 @@ const CastTable = ({ cast }) => {
         </TableHead>
         <TableBody>
           {cast && cast.length > 0 ? cast.map(person => (
-            <TableRow key={person.cast_id || person.id || person.credit_id} hover>
+            <TableRow
+              key={person.cast_id || person.id || person.credit_id}
+              hover
+              onClick={() => navigate(`/person/${person.id}`)}
+              style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
+            >
               <TableCell>
                 <Avatar variant="rounded" src={person.profile_path ? getImageUrl(person.profile_path, 'w92') : '/500x750.png'} alt={person.name} sx={{ width: 40, height: 60, bgcolor: 'grey.200' }} />
               </TableCell>
@@ -81,6 +87,7 @@ const TrailersTable = ({ videos }) => {
 
 const RecommendationsTable = ({ recommendations }) => {
   const { getImageUrl } = useTmdbConfig();
+  const navigate = useNavigate();
   return (
     <TableContainer component={Paper} sx={{ mb: 2 }}>
       <Table size="small">
@@ -97,7 +104,12 @@ const RecommendationsTable = ({ recommendations }) => {
           {recommendations && recommendations.length > 0 ? recommendations.map(item => {
             const year = item.release_date ? new Date(item.release_date).getFullYear() : '';
             return (
-              <TableRow key={item.id} hover>
+              <TableRow
+                key={item.id}
+                hover
+                onClick={() => navigate(`/movie/${item.id}`)}
+                style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
+              >
                 <TableCell>
                   <Avatar variant="rounded" src={item.poster_path ? getImageUrl(item.poster_path, 'w92') : '/500x750.png'} alt={item.title} sx={{ width: 40, height: 60, bgcolor: 'grey.200' }} />
                 </TableCell>

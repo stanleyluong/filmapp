@@ -1,6 +1,6 @@
 import { Avatar, Box, Pagination, Paper, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, Typography } from '@mui/material';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTmdbConfig } from '../hooks/useTmdbConfig';
 
 const PAGE_SIZE = 20;
@@ -25,6 +25,7 @@ const FilmographyTable = ({ movies, tvShows }) => {
   const [tab, setTab] = useState(0);
   const [page, setPage] = useState(1);
   const { getImageUrl } = useTmdbConfig();
+  const navigate = useNavigate();
 
   const data = tab === 0 ? movies : tvShows;
   const pagedData = data.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -63,11 +64,11 @@ const FilmographyTable = ({ movies, tvShows }) => {
                 const title = item.title || item.name;
                 const posterUrl = item.poster_path ? getImageUrl(item.poster_path, 'w92') : '/500x750.png';
                 return (
-                  <TableRow key={`${item.id}-${item.credit_id || ''}`}
+                  <TableRow 
+                    key={`${item.id}-${item.credit_id || ''}`}
                     hover
-                    component={Link}
-                    to={linkPath}
-                    style={{ textDecoration: 'none', color: 'inherit' }}
+                    onClick={() => navigate(linkPath)}
+                    style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
                   >
                     <TableCell>
                       <Avatar variant="rounded" src={posterUrl} alt={title} sx={{ width: 40, height: 60, bgcolor: 'grey.200' }} />

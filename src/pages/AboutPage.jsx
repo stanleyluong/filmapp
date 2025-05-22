@@ -15,6 +15,14 @@ const techStack = [
   { name: 'ESLint & Prettier', description: 'Code linting and formatting' },
 ];
 
+const features = [
+  'Clickable cast and recommendation rows for deeper exploration of people and movies',
+  'Improved episode and TV show detail pages with richer information and modern layout',
+  'Trailers accessible by clicking anywhere on the row, not just the thumbnail',
+  'Consistent navigation and user experience across movie and TV pages',
+  'Focus on accessibility and responsive design for all devices',
+];
+
 const AboutPage = () => (
   <Box maxWidth="md" mx="auto" py={8} px={2}>
     <Typography variant="h3" component="h1" color="primary" fontWeight={700} gutterBottom>
@@ -22,9 +30,19 @@ const AboutPage = () => (
     </Typography>
     <Divider sx={{ mb: 3, width: 64, borderBottomWidth: 4, borderColor: 'primary.main' }} />
     <Typography variant="h6" color="text.secondary" mb={4}>
-      <Box component="span" fontWeight={600} color="text.primary">FilmFinder</Box> is a modern movie and TV discovery app built with the latest web technologies. Here's the tech stack powering this project:
+      <Box component="span" fontWeight={600} color="text.primary">FilmFinder</Box> is a modern movie and TV discovery app built with the latest web technologies. Here are some of the features and technologies powering this project:
     </Typography>
     <Paper elevation={2} sx={{ p: 3, mb: 6, background: 'background.paper' }}>
+      <Typography variant="h5" fontWeight={700} color="primary" mb={2}>Features</Typography>
+      <List sx={{ mb: 2 }}>
+        {features.map((feature, idx) => (
+          <ListItem key={idx} disableGutters sx={{ py: 1 }}>
+            <ListItemText primary={<Typography variant="body1" color="text.primary">{feature}</Typography>} />
+          </ListItem>
+        ))}
+      </List>
+      <Divider sx={{ my: 2 }} />
+      <Typography variant="h6" fontWeight={700} color="primary" mb={1}>Tech Stack</Typography>
       <List>
         {techStack.map((tech) => (
           <ListItem key={tech.name} disableGutters sx={{ py: 1.5 }}>

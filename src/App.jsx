@@ -10,6 +10,8 @@ import PersonDetailPage from './pages/PersonDetailPage';
 import SearchPage from './pages/SearchPage';
 import SeasonDetailPage from './pages/SeasonDetailPage';
 import TVShowDetailPage from './pages/TVShowDetailPage';
+import TopRatedMoviesPage from './pages/TopRatedMoviesPage';
+import TopRatedTVShowsPage from './pages/TopRatedTVShowsPage';
 
 // Placeholder Pages
 const DiscoverPage = () => <div className="container mx-auto p-4">DiscoverPage - Placeholder</div>;
@@ -32,6 +34,8 @@ function App() {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/discover" element={<DiscoverPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/top-rated-movies" element={<TopRatedMoviesPage />} />
+          <Route path="/top-rated-tv-shows" element={<TopRatedTVShowsPage />} />
           {/* <Route path="*" element={<NotFoundPage />} /> */}
         </Routes>
       </main>
