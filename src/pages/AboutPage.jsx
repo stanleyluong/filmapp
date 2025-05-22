@@ -1,0 +1,51 @@
+import { Box, Divider, List, ListItem, ListItemText, Link as MuiLink, Paper, Typography } from '@mui/material';
+
+const techStack = [
+  { name: 'React', description: 'UI library for building user interfaces (v18+)' },
+  { name: 'Vite', description: 'Fast build tool and dev server' },
+  { name: 'React Router', description: 'Declarative routing for React apps' },
+  { name: 'Axios', description: 'Promise-based HTTP client for API requests' },
+  { name: 'Tailwind CSS', description: 'Utility-first CSS framework for rapid UI development' },
+  { name: 'Shadcn UI', description: 'Beautiful, accessible React components built on Radix UI and Tailwind' },
+  { name: 'TMDB API', description: 'The Movie Database API for movie/TV/person data' },
+  { name: 'Lucide React', description: 'Icon library for React' },
+  { name: 'react-simple-star-rating', description: 'Star rating component for displaying ratings' },
+  { name: 'PostCSS & Autoprefixer', description: 'CSS processing and vendor prefixing' },
+  { name: 'Radix UI', description: 'Primitives for building accessible UI components (used by Shadcn)' },
+  { name: 'ESLint & Prettier', description: 'Code linting and formatting' },
+];
+
+const AboutPage = () => (
+  <Box maxWidth="md" mx="auto" py={8} px={2}>
+    <Typography variant="h3" component="h1" color="primary" fontWeight={700} gutterBottom>
+      About FilmFinder
+    </Typography>
+    <Divider sx={{ mb: 3, width: 64, borderBottomWidth: 4, borderColor: 'primary.main' }} />
+    <Typography variant="h6" color="text.secondary" mb={4}>
+      <Box component="span" fontWeight={600} color="text.primary">FilmFinder</Box> is a modern movie and TV discovery app built with the latest web technologies. Here's the tech stack powering this project:
+    </Typography>
+    <Paper elevation={2} sx={{ p: 3, mb: 6, background: 'background.paper' }}>
+      <List>
+        {techStack.map((tech) => (
+          <ListItem key={tech.name} disableGutters sx={{ py: 1.5 }}>
+            <ListItemText
+              primary={<Typography variant="subtitle1" color="primary" fontWeight={600}>{tech.name}</Typography>}
+              secondary={<Typography variant="body2" color="text.secondary">{tech.description}</Typography>}
+            />
+          </ListItem>
+        ))}
+      </List>
+    </Paper>
+    <Box mt={8} textAlign="center" color="text.secondary" fontSize={14}>
+      &copy; {new Date().getFullYear()} <Box component="span" fontWeight={600} color="text.primary">FilmFinder</Box>. All rights reserved.<br />
+      <Box component="span" display="inline-block" mt={1}>
+        Movie and TV Show data provided by{' '}
+        <MuiLink href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer" color="primary" fontWeight={600} underline="hover">
+          TMDb
+        </MuiLink>.
+      </Box>
+    </Box>
+  </Box>
+);
+
+export default AboutPage; 
