@@ -1,6 +1,6 @@
 import { Box, Card, CardMedia, CircularProgress, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import { useMemo } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useFetchData from '../hooks/useFetchData';
 import { useTmdbConfig } from '../hooks/useTmdbConfig';
 import { fetchSeasonDetails } from '../services/tmdbApi';
@@ -10,6 +10,7 @@ const SeasonDetailPage = () => {
   const tvId = id;
   const fetchParams = useMemo(() => ({ tvId, seasonNumber }), [tvId, seasonNumber]);
   const { getImageUrl, loading: configLoading, error: configError } = useTmdbConfig();
+  const navigate = useNavigate();
 
   const { data: season, isLoading, error } = useFetchData(fetchSeasonDetails, fetchParams);
 
@@ -81,8 +82,7 @@ const SeasonDetailPage = () => {
                 <TableRow
                   key={episode.id}
                   hover
-                  component={Link}
-                  to={`/tv/${tvId}/season/${seasonNumber}/episode/${episode.episode_number}`}
+                  onClick={() => navigate(`/tv/${tvId}/season/${seasonNumber}/episode/${episode.episode_number}`)}
                   style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
                 >
                   <TableCell>

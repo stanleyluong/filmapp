@@ -80,10 +80,17 @@ const EpisodeDetailPage = () => {
       </Box>
       {/* Tabs Section for Cast, Crew, Guest Stars */}
       <Box maxWidth="lg" mx="auto" px={2}>
-        <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 3 }}>
-          <Tab label="Cast" component="div" />
-          <Tab label="Crew" component="div" />
-          <Tab label="Guest Stars" component="div" />
+        <Tabs
+          value={tab}
+          onChange={(_, v) => setTab(v)}
+          variant="scrollable"
+          scrollButtons="auto"
+          allowScrollButtonsMobile
+          sx={{ mb: 3 }}
+        >
+          <Tab label={`Cast (${cast?.length || 0})`} component="div" />
+          <Tab label={`Crew (${crew?.length || 0})`} component="div" />
+          <Tab label={`Guest Stars (${guest_stars?.length || 0})`} component="div" />
         </Tabs>
         {tab === 0 && (
           <TableContainer component={Paper} sx={{ mb: 2 }}>

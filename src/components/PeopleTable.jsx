@@ -1,5 +1,5 @@
 import { Avatar, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTmdbConfig } from '../hooks/useTmdbConfig';
 
 const columns = [
@@ -12,6 +12,7 @@ const columns = [
 
 const PeopleTable = ({ people }) => {
   const { getImageUrl } = useTmdbConfig();
+  const navigate = useNavigate();
 
   return (
     <TableContainer component={Paper} sx={{ mb: 2 }}>
@@ -40,9 +41,8 @@ const PeopleTable = ({ people }) => {
                 <TableRow
                   key={person.id}
                   hover
-                  component={Link}
-                  to={`/person/${person.id}`}
-                  style={{ textDecoration: 'none', color: 'inherit' }}
+                  sx={{ cursor: 'pointer' }}
+                  onClick={() => navigate(`/person/${person.id}`)}
                 >
                   <TableCell>
                     <Avatar variant="rounded" src={profileUrl} alt={person.name} sx={{ width: 40, height: 60, bgcolor: 'grey.200' }} />

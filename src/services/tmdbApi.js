@@ -27,7 +27,7 @@ export const fetchConfiguration = async () => {
 };
 
 // Generic data fetching function
-const fetchData = async (endpoint, params = {}) => {
+export const fetchData = async (endpoint, params = {}) => {
   try {
     const response = await tmdbApi.get(endpoint, { params });
     return response.data;

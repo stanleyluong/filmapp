@@ -9,6 +9,7 @@ import {
     Typography
 } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useSearchParams } from 'react-router-dom';
 import PeopleTable from '../components/PeopleTable';
 
@@ -137,81 +138,86 @@ const SearchPage = () => {
   }
 
   return (
-    <Box maxWidth="lg" mx="auto" py={4}>
-      <Typography variant="h4" fontWeight={700} mb={4} color="primary.main">
-        Search Results for: <Box component="span" color="primary.dark">{query}</Box>
-      </Typography>
-      <Tabs value={tab} onChange={handleTabChange} sx={{ mb: 3 }}>
-        {TABS.map(t => (
-          <Tab key={t.value} label={`${t.label} (${tabCounts[t.value]})`} value={t.value} />
-        ))}
-      </Tabs>
-      {isLoading && (
-        <Box textAlign="center" py={8}><CircularProgress /></Box>
-      )}
-      {!isLoading && error && (
-        <Typography color="error" py={8}>Error loading results: {error.message}</Typography>
-      )}
-      {/* Movies/TV Tabs */}
-      {!isLoading && !error && (tab === 'movies' || tab === 'tv') && rawResults.length === 0 && (
-        <Typography color="text.secondary" py={8} textAlign="center">
-          {query ? `No ${tab === 'movies' ? 'movies' : 'TV shows'} found for "${query}".` : 'No results to display.'}
+    <Box>
+      <Helmet>
+        <title>{query ? `Search: \"${query}\" - FilmApp` : 'FilmApp'}</title>
+      </Helmet>
+      <Box maxWidth="lg" mx="auto" py={4}>
+        <Typography variant="h4" fontWeight={700} mb={4} color="primary.main">
+          Search Results for: <Box component="span" color="primary.dark">{query}</Box>
         </Typography>
-      )}
-      {!isLoading && !error && (tab === 'movies' || tab === 'tv') && rawResults.length > 0 && (
-        <Paper elevation={2} sx={{ mb: 4 }}>
-          <TableContainer>
-            <Table stickyHeader>
-              <TableHead>
-                <TableRow>
-                  {columns.map(col => (
-                    <TableCell
-                      key={col.key}
-                      align={col.align || 'left'}
-                      style={{ minWidth: col.minWidth }}
-                      sortDirection={sortConfig.key === col.key ? sortConfig.direction : false}
-                    >
-                      <TableSortLabel
-                        active={sortConfig.key === col.key}
-                        direction={sortConfig.key === col.key ? sortConfig.direction : 'asc'}
-                        onClick={() => requestSort(col.key)}
-                        IconComponent={SortIcon}
+        <Tabs value={tab} onChange={handleTabChange} sx={{ mb: 3 }}>
+          {TABS.map(t => (
+            <Tab key={t.value} label={`${t.label} (${tabCounts[t.value]})`} value={t.value} />
+          ))}
+        </Tabs>
+        {isLoading && (
+          <Box textAlign="center" py={8}><CircularProgress /></Box>
+        )}
+        {!isLoading && error && (
+          <Typography color="error" py={8}>Error loading results: {error.message}</Typography>
+        )}
+        {/* Movies/TV Tabs */}
+        {!isLoading && !error && (tab === 'movies' || tab === 'tv') && rawResults.length === 0 && (
+          <Typography color="text.secondary" py={8} textAlign="center">
+            {query ? `No ${tab === 'movies' ? 'movies' : 'TV shows'} found for "${query}".` : 'No results to display.'}
+          </Typography>
+        )}
+        {!isLoading && !error && (tab === 'movies' || tab === 'tv') && rawResults.length > 0 && (
+          <Paper elevation={2} sx={{ mb: 4 }}>
+            <TableContainer>
+              <Table stickyHeader>
+                <TableHead>
+                  <TableRow>
+                    {columns.map(col => (
+                      <TableCell
+                        key={col.key}
+                        align={col.align || 'left'}
+                        style={{ minWidth: col.minWidth }}
+                        sortDirection={sortConfig.key === col.key ? sortConfig.direction : false}
                       >
-                        {col.label}
-                      </TableSortLabel>
-                    </TableCell>
+                        <TableSortLabel
+                          active={sortConfig.key === col.key}
+                          direction={sortConfig.key === col.key ? sortConfig.direction : 'asc'}
+                          onClick={() => requestSort(col.key)}
+                          IconComponent={SortIcon}
+                        >
+                          {col.label}
+                        </TableSortLabel>
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {getPage(getSorted(rawResults)).map(item => (
+                    <SearchResultRow key={`${item.id}-${item.media_type}`} item={item} />
                   ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {getPage(getSorted(rawResults)).map(item => (
-                  <SearchResultRow key={`${item.id}-${item.media_type}`} item={item} />
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Paper>
-      )}
-      {/* People Tab */}
-      {!isLoading && !error && tab === 'people' && rawResults.length === 0 && (
-        <Typography color="text.secondary" py={8} textAlign="center">
-          {query ? `No people found for "${query}".` : 'No results to display.'}
-        </Typography>
-      )}
-      {!isLoading && !error && tab === 'people' && rawResults.length > 0 && (
-        <PeopleTable people={rawResults} />
-      )}
-      {/* Pagination for all tabs if needed */}
-      {data && data.total_pages > 1 && (
-        <Box display="flex" justifyContent="center" mt={4}>
-          <MuiPagination
-            count={data.total_pages}
-            page={currentPage}
-            onChange={handlePageChange}
-            color="primary"
-          />
-        </Box>
-      )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+        )}
+        {/* People Tab */}
+        {!isLoading && !error && tab === 'people' && rawResults.length === 0 && (
+          <Typography color="text.secondary" py={8} textAlign="center">
+            {query ? `No people found for "${query}".` : 'No results to display.'}
+          </Typography>
+        )}
+        {!isLoading && !error && tab === 'people' && rawResults.length > 0 && (
+          <PeopleTable people={rawResults} />
+        )}
+        {/* Pagination for all tabs if needed */}
+        {data && data.total_pages > 1 && (
+          <Box display="flex" justifyContent="center" mt={4}>
+            <MuiPagination
+              count={data.total_pages}
+              page={currentPage}
+              onChange={handlePageChange}
+              color="primary"
+            />
+          </Box>
+        )}
+      </Box>
     </Box>
   );
 };

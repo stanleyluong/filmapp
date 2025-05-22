@@ -1,5 +1,6 @@
 import { Avatar, Box, Card, CardMedia, Chip, CircularProgress, Grid, Paper, Rating, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router-dom';
 import useFetchData from '../hooks/useFetchData';
 import { useTmdbConfig } from '../hooks/useTmdbConfig';
@@ -214,6 +215,9 @@ const MovieDetailPage = () => {
 
   return (
     <Box>
+      <Helmet>
+        <title>{movie?.title ? `${movie.title} - FilmApp` : 'FilmApp'}</title>
+      </Helmet>
       {/* Hero Section */}
       <Box
         sx={{
@@ -266,11 +270,18 @@ const MovieDetailPage = () => {
       </Box>
       {/* Tabs Section */}
       <Box maxWidth="lg" mx="auto" px={2}>
-        <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 3 }}>
-          <Tab label="Cast" component="div" />
-          <Tab label="Trailers & Videos" component="div" />
-          <Tab label="Recommendations" component="div" />
-          <Tab label="Where to Watch" component="div" />
+        <Tabs
+          value={tab}
+          onChange={(_, v) => setTab(v)}
+          variant="scrollable"
+          scrollButtons="auto"
+          allowScrollButtonsMobile
+          sx={{ mb: 3 }}
+        >
+          <Tab label={`Cast (${credits?.cast?.length || 0})`} component="div" />
+          <Tab label={`Trailers & Videos (${videos?.results?.length || 0})`} component="div" />
+          <Tab label={`Recommendations (${recommendations?.results?.length || 0})`} component="div" />
+          <Tab label={`Where to Watch (${providers ? Object.values(providers).reduce((acc, arr) => acc + arr.length, 0) : 0})`} component="div" />
         </Tabs>
         {tab === 0 && <CastTable cast={credits?.cast || []} />}
         {tab === 1 && <TrailersTable videos={videos?.results || []} />}
